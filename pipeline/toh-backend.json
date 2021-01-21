@@ -1,7 +1,7 @@
 [
   {
-    "name": "nginx",
-    "image": "nginx",
+    "name": "toh-backend",
+    "image": "${repository_url}",
     "cpu": 10,
     "memory": 512,
     "essential": true,
@@ -9,7 +9,12 @@
       {
         "containerPort": 80,
         "hostPort": 80
+      },
+      {
+        "containerPort": 3000,
+        "hostPort": 3000
       }
+
     ]
   }
 ]
