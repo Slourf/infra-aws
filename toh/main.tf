@@ -5,9 +5,9 @@ resource "aws_s3_bucket" "pipeline_bucket" {
     force_destroy = true
 }
 
-resource "aws_codepipeline" "pipeline" {
-  name     = "devops-pipeline-1"
-  role_arn = aws_iam_role.devops-pipeline-iam-role-1.arn
+resource "aws_codepipeline" "devops_pipeline_toh" {
+  name     = "devops-pipeline-toh"
+  role_arn = aws_iam_role.devops_pipeline_iam_role_1.arn
 
   artifact_store {
     location = aws_s3_bucket.pipeline_bucket.bucket
@@ -53,7 +53,7 @@ resource "aws_codepipeline" "pipeline" {
       version          = "1"
 
       configuration = {
-        ProjectName = aws_codebuild_project.devops-build-toh-backend.name
+        ProjectName = aws_codebuild_project.devops_build_toh_backend.name
       }
     }
 
@@ -67,7 +67,7 @@ resource "aws_codepipeline" "pipeline" {
       version          = "1"
 
       configuration = {
-        ProjectName = aws_codebuild_project.devops-build-toh-frontend.name
+        ProjectName = aws_codebuild_project.devops_build_toh_frontend.name
       }
     }
   }
@@ -84,8 +84,8 @@ resource "aws_codepipeline" "pipeline" {
       version         = "1"
 
       configuration = {
-          ClusterName = "devops-cluster-toh"
-          ServiceName = "devops-service-toh-backend"
+          ClusterName = aws_ecs_cluster.devops_cluster_toh.name
+          ServiceName = aws_ecs_service.devops_service_toh_backend.name
       }
     }
 
@@ -98,8 +98,8 @@ resource "aws_codepipeline" "pipeline" {
       version         = "1"
 
       configuration = {
-          ClusterName = "devops-cluster-toh"
-          ServiceName = "devops-service-toh-frontend"
+          ClusterName = aws_ecs_cluster.devops_cluster_toh.name
+          ServiceName = aws_ecs_service.devops_service_toh_frontend.name
       }
     }
   }

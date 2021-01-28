@@ -12,6 +12,6 @@ provider "aws" {
   region  = var.region
 }
 
-module "pipeline" {
-  source = "./pipeline"
+module "toh" {
+  source = "./toh"
 }

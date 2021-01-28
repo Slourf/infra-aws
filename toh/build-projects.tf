@@ -1,7 +1,7 @@
-resource "aws_codebuild_project" "devops-build-toh-backend" {
+resource "aws_codebuild_project" "devops_build_toh_backend" {
   name          = "devops-build-toh-backend"
   description   = "Build toh backend image"
-  service_role  = aws_iam_role.devops-codebuild-project-toh-backend-role.arn
+  service_role  = aws_iam_role.devops_codebuild_project_toh_backend_role.arn
 
   artifacts {
     type = "CODEPIPELINE"
@@ -16,7 +16,7 @@ resource "aws_codebuild_project" "devops-build-toh-backend" {
 
     environment_variable {
       name  = "IMAGE_REPO_NAME"
-      value = aws_ecr_repository.ecr-toh-backend.repository_url
+      value = aws_ecr_repository.ecr_toh_backend.repository_url
     }
     environment_variable {
       name  = "IMAGE_TAG"
@@ -37,10 +37,10 @@ resource "aws_codebuild_project" "devops-build-toh-backend" {
   }
 }
 
-resource "aws_codebuild_project" "devops-build-toh-frontend" {
+resource "aws_codebuild_project" "devops_build_toh_frontend" {
   name          = "devops-build-toh-frontend"
   description   = "Build toh frontend images"
-  service_role  = aws_iam_role.devops-codebuild-project-toh-frontend-role.arn
+  service_role  = aws_iam_role.devops_codebuild_project_toh_frontend_role.arn
 
   artifacts {
     type = "CODEPIPELINE"
@@ -55,11 +55,21 @@ resource "aws_codebuild_project" "devops-build-toh-frontend" {
 
     environment_variable {
       name  = "IMAGE_REPO_NAME"
-      value = aws_ecr_repository.ecr-toh-frontend.repository_url
+      value = aws_ecr_repository.ecr_toh_frontend.repository_url
     }
     environment_variable {
       name  = "IMAGE_TAG"
       value = "latest"
+    }
+
+    environment_variable {
+      name = "SERVER_URL"
+      value = aws_lb.devops_lb_toh_backend.dns_name
+    }
+
+    environment_variable {
+      name = "SERVER_PORT"
+      value = "3000"
     }
   }
 

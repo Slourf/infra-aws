@@ -1,52 +1,52 @@
-resource "aws_iam_role" "devops-pipeline-iam-role-1" {
+resource "aws_iam_role" "devops_pipeline_iam_role_1" {
     name = "devops-pipeline-iam-role-1"
-    assume_role_policy = data.aws_iam_policy_document.pipeline-assume-role.json
+    assume_role_policy = data.aws_iam_policy_document.pipeline_assume_role.json
 }
 
-resource "aws_iam_role" "devops-codebuild-project-toh-backend-role" {
+resource "aws_iam_role" "devops_codebuild_project_toh_backend_role" {
   name = "devops-codebuild-project-toh-role"
-  assume_role_policy = data.aws_iam_policy_document.codebuild-toh-assume-role.json
+  assume_role_policy = data.aws_iam_policy_document.codebuild_toh_assume_role.json
 }
 
-resource "aws_iam_role" "devops-codebuild-project-toh-frontend-role" {
+resource "aws_iam_role" "devops_codebuild_project_toh_frontend_role" {
   name = "devops-codebuild-project-docker-role"
-  assume_role_policy = data.aws_iam_policy_document.codebuild-toh-assume-role.json
+  assume_role_policy = data.aws_iam_policy_document.codebuild_toh_assume_role.json
 }
 
-resource "aws_iam_policy" "devops-pipeline-policy-1" {
+resource "aws_iam_policy" "devops_pipeline_policy_1" {
   name = "devops-pipeline-policy-1"
   policy = data.aws_iam_policy_document.policies.json
 }
 
-resource "aws_iam_policy" "devops-codebuild-project-toh-backend-policy" {
+resource "aws_iam_policy" "devops_codebuild_project_toh_backend_policy" {
   name = "devops-codebuild-project-toh-backend-policy"
-  policy = data.aws_iam_policy_document.policies-toh-backend.json
+  policy = data.aws_iam_policy_document.policies_toh_backend.json
 }
 
-resource "aws_iam_policy" "devops-codebuild-project-toh-frontend-policy" {
+resource "aws_iam_policy" "devops_codebuild_project_toh_frontend_policy" {
   name = "devops-codebuild-project-toh-frontend-policy"
-  policy = data.aws_iam_policy_document.policies-toh-frontend.json
+  policy = data.aws_iam_policy_document.policies_toh_frontend.json
 }
 
-resource "aws_iam_policy_attachment" "devops-iam-attachement-1" {
+resource "aws_iam_policy_attachment" "devops_iam_attachement_1" {
   name = "devops-iam-attachement-1"
-  roles = [aws_iam_role.devops-pipeline-iam-role-1.name]
-  policy_arn = aws_iam_policy.devops-pipeline-policy-1.arn
+  roles = [aws_iam_role.devops_pipeline_iam_role_1.name]
+  policy_arn = aws_iam_policy.devops_pipeline_policy_1.arn
 }
 
-resource "aws_iam_policy_attachment" "devops-iam-attachement-project-toh-backend" {
+resource "aws_iam_policy_attachment" "devops_iam_attachement_project_toh_backend" {
   name = "devops-iam-attachement-project-toh-backend"
-  roles = [aws_iam_role.devops-codebuild-project-toh-backend-role.name]
-  policy_arn = aws_iam_policy.devops-codebuild-project-toh-backend-policy.arn
+  roles = [aws_iam_role.devops_codebuild_project_toh_backend_role.name]
+  policy_arn = aws_iam_policy.devops_codebuild_project_toh_backend_policy.arn
 }
 
-resource "aws_iam_policy_attachment" "devops-iam-attachement-project-toh-frontend" {
+resource "aws_iam_policy_attachment" "devops_iam_attachement_project_toh_frontend" {
   name = "devops-iam-attachement-project-toh-frontend"
-  roles = [aws_iam_role.devops-codebuild-project-toh-frontend-role.name]
-  policy_arn = aws_iam_policy.devops-codebuild-project-toh-frontend-policy.arn
+  roles = [aws_iam_role.devops_codebuild_project_toh_frontend_role.name]
+  policy_arn = aws_iam_policy.devops_codebuild_project_toh_frontend_policy.arn
 }
 
-data "aws_iam_policy_document" "pipeline-assume-role" {
+data "aws_iam_policy_document" "pipeline_assume_role" {
   statement {
     sid = ""
 
@@ -63,7 +63,7 @@ data "aws_iam_policy_document" "pipeline-assume-role" {
   }
 }
 
-data "aws_iam_policy_document" "codebuild-toh-assume-role" {
+data "aws_iam_policy_document" "codebuild_toh_assume_role" {
   statement {
     sid = ""
 
@@ -126,7 +126,7 @@ data "aws_iam_policy_document" "policies" {
   }
 }
 
-data "aws_iam_policy_document" "policies-toh-backend" {
+data "aws_iam_policy_document" "policies_toh_backend" {
   statement {
     sid = ""
 
@@ -173,7 +173,7 @@ data "aws_iam_policy_document" "policies-toh-backend" {
   }
 }
 
-data "aws_iam_policy_document" "policies-toh-frontend" {
+data "aws_iam_policy_document" "policies_toh_frontend" {
   statement {
     sid = ""
 
