@@ -3,8 +3,8 @@ resource "aws_security_group" "devops_service_sg_toh_backend" {
   vpc_id = aws_vpc.devops_vpc_toh.id
 
   ingress {
-    from_port   = 3000
-    to_port     = 3000
+    from_port   = var.backend_port
+    to_port     = var.backend_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -38,6 +38,6 @@ resource "aws_ecs_service" "devops_service_toh_backend" {
   load_balancer {
     target_group_arn = aws_lb_target_group.devops_lb_tg_toh_backend.arn
     container_name   = "toh-backend"
-    container_port   = 3000 
+    container_port   = var.backend_port
   }
 }

@@ -22,6 +22,14 @@ resource "aws_codebuild_project" "devops_build_toh_backend" {
       name  = "IMAGE_TAG"
       value = "latest"
     }
+    environment_variable {
+      name  = "DB_USER"
+      value = var.db_user
+    }
+    environment_variable {
+      name  = "DB_PASSWORD"
+      value = var.db_password
+    }
   }
 
   source {
@@ -69,7 +77,7 @@ resource "aws_codebuild_project" "devops_build_toh_frontend" {
 
     environment_variable {
       name = "SERVER_PORT"
-      value = "3000"
+      value = var.backend_port
     }
   }
 

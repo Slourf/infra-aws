@@ -1,5 +1,3 @@
-variable "region" {}
-
 variable "backend_port" {}
 
 variable "frontend_port" {}

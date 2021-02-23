@@ -32,9 +32,9 @@ resource "aws_codepipeline" "devops_pipeline_toh" {
       output_artifacts = ["source_output"]
 
       configuration = {
-        ConnectionArn        = "arn:aws:codestar-connections:eu-west-3:120523844784:connection/df4c72ac-2c1e-48f4-b15b-9bcd07b3eadf"
-        FullRepositoryId     = "Slourf/Tour-of-Heroes"
-        BranchName           = "main"
+        ConnectionArn        = var.github.connection_arn
+        FullRepositoryId     = var.github.repository
+        BranchName           = var.github.branch
         OutputArtifactFormat = "CODE_ZIP"
       }
     }

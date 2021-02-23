@@ -3,8 +3,8 @@ resource "aws_security_group" "devops_service_sg_toh_frontend" {
   vpc_id = aws_vpc.devops_vpc_toh.id
 
   ingress {
-    from_port   = 80
-    to_port     = 80
+    from_port   = var.frontend_port
+    to_port     = var.frontend_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -38,6 +38,6 @@ resource "aws_ecs_service" "devops_service_toh_frontend" {
   load_balancer {
     target_group_arn = aws_lb_target_group.devops_lb_tg_toh_frontend.arn
     container_name   = "toh-frontend"
-    container_port   = 80
+    container_port   = var.frontend_port
   }
 }

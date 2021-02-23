@@ -3,8 +3,8 @@ resource "aws_security_group" "devops_lb_sg_toh_backend" {
   vpc_id = aws_vpc.devops_vpc_toh.id
 
   ingress {
-    from_port   = 3000
-    to_port     = 3000
+    from_port   = var.backend_port
+    to_port     = var.backend_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -22,8 +22,8 @@ resource "aws_security_group" "devops_lb_sg_toh_frontend" {
   vpc_id = aws_vpc.devops_vpc_toh.id
 
   ingress {
-    from_port   = 80
-    to_port     = 80 
+    from_port   = var.frontend_port
+    to_port     = var.frontend_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -60,7 +60,7 @@ resource "aws_lb" "devops_lb_toh_frontend" {
 
 resource "aws_lb_listener" "devops_lb_listener_toh_backend" {
   load_balancer_arn = aws_lb.devops_lb_toh_backend.arn
-  port              = 3000
+  port              = var.backend_port
   protocol          = "HTTP"
 
   default_action {
@@ -71,7 +71,7 @@ resource "aws_lb_listener" "devops_lb_listener_toh_backend" {
 
 resource "aws_lb_listener" "devops_lb_listener_toh_frontend" {
   load_balancer_arn = aws_lb.devops_lb_toh_frontend.arn
-  port              = 80
+  port              = var.frontend_port
   protocol          = "HTTP"
 
   default_action {
@@ -82,7 +82,7 @@ resource "aws_lb_listener" "devops_lb_listener_toh_frontend" {
 
 resource "aws_lb_target_group" "devops_lb_tg_toh_frontend" {
   name        = "devops-lb-tg-toh-frontend"
-  port        = 80
+  port        = var.frontend_port
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = aws_vpc.devops_vpc_toh.id
@@ -90,7 +90,7 @@ resource "aws_lb_target_group" "devops_lb_tg_toh_frontend" {
 
 resource "aws_lb_target_group" "devops_lb_tg_toh_backend" {
   name        = "devops-lb-tg-toh-backend"
-  port        = 3000
+  port        = var.backend_port
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = aws_vpc.devops_vpc_toh.id
