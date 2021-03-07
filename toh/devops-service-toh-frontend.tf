@@ -1,6 +1,6 @@
-resource "aws_security_group" "devops_service_sg_toh_frontend" {
-  name   = "devops-service-sg-toh-frontend"
-  vpc_id = aws_vpc.devops_vpc_toh.id
+resource "aws_security_group" "sg_service_frontend" {
+  name   = "${var.app_name}-sg-service-frontend"
+  vpc_id = aws_vpc.vpc.id
 
   ingress {
     from_port   = var.frontend_port
@@ -17,10 +17,10 @@ resource "aws_security_group" "devops_service_sg_toh_frontend" {
   }
 }
 
-resource "aws_ecs_service" "devops_service_toh_frontend" {
-  name            = "devops-service-toh-frontend"
-  cluster         = aws_ecs_cluster.devops_cluster_toh.id
-  task_definition = aws_ecs_task_definition.toh_frontend.id
+resource "aws_ecs_service" "service_frontend" {
+  name            = "${var.app_name}-service-frontend"
+  cluster         = aws_ecs_cluster.cluster.id
+  task_definition = aws_ecs_task_definition.frontend.id
   launch_type     = "FARGATE"
   desired_count   = 2
   deployment_maximum_percent = 100
@@ -28,16 +28,16 @@ resource "aws_ecs_service" "devops_service_toh_frontend" {
 
   network_configuration {
     subnets          = [
-      aws_subnet.devops_vpc_toh_subnet_1.id,
-      aws_subnet.devops_vpc_toh_subnet_2.id
+      aws_subnet.vpc_subnet_1.id,
+      aws_subnet.vpc_subnet_2.id
     ]
     assign_public_ip = true
-    security_groups  = [aws_security_group.devops_service_sg_toh_frontend.id]
+    security_groups  = [aws_security_group.sg_service_frontend.id]
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.devops_lb_tg_toh_frontend.arn
-    container_name   = "toh-frontend"
+    target_group_arn = aws_lb_target_group.lb_tg_frontend.arn
+    container_name   = "${var.app_name}-frontend"
     container_port   = var.frontend_port
   }
 }

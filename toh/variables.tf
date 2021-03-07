@@ -9,3 +9,7 @@ variable "db_user" {}
 variable "db_password" {
   sensitive   = true
 }
+
+variable "app_name" {
+  type = string
+}

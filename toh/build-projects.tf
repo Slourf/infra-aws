@@ -1,7 +1,7 @@
-resource "aws_codebuild_project" "devops_build_toh_backend" {
-  name          = "devops-build-toh-backend"
+resource "aws_codebuild_project" "build_backend" {
+  name          = "${var.app_name}-build-backend"
   description   = "Build toh backend image"
-  service_role  = aws_iam_role.devops_codebuild_project_toh_backend_role.arn
+  service_role  = aws_iam_role.codebuild_project_backend_role.arn
 
   artifacts {
     type = "CODEPIPELINE"
@@ -16,7 +16,7 @@ resource "aws_codebuild_project" "devops_build_toh_backend" {
 
     environment_variable {
       name  = "IMAGE_REPO_NAME"
-      value = aws_ecr_repository.ecr_toh_backend.repository_url
+      value = aws_ecr_repository.ecr_backend.repository_url
     }
     environment_variable {
       name  = "IMAGE_TAG"
@@ -34,21 +34,21 @@ resource "aws_codebuild_project" "devops_build_toh_backend" {
 
   source {
     type            = "CODEPIPELINE"
-    buildspec = "toh-backend-buildspec.yml"
+    buildspec = "${var.app_name}-backend-buildspec.yml"
   }
 
   logs_config {
     cloudwatch_logs {
       group_name  = "Devops"
-      stream_name = "codebuild-toh-backend"
+      stream_name = "${var.app_name}-codebuild-backend"
     }
   }
 }
 
-resource "aws_codebuild_project" "devops_build_toh_frontend" {
-  name          = "devops-build-toh-frontend"
+resource "aws_codebuild_project" "build_frontend" {
+  name          = "${var.app_name}-build-frontend"
   description   = "Build toh frontend images"
-  service_role  = aws_iam_role.devops_codebuild_project_toh_frontend_role.arn
+  service_role  = aws_iam_role.codebuild_project_frontend_role.arn
 
   artifacts {
     type = "CODEPIPELINE"
@@ -63,7 +63,7 @@ resource "aws_codebuild_project" "devops_build_toh_frontend" {
 
     environment_variable {
       name  = "IMAGE_REPO_NAME"
-      value = aws_ecr_repository.ecr_toh_frontend.repository_url
+      value = aws_ecr_repository.ecr_frontend.repository_url
     }
     environment_variable {
       name  = "IMAGE_TAG"
@@ -72,7 +72,7 @@ resource "aws_codebuild_project" "devops_build_toh_frontend" {
 
     environment_variable {
       name = "SERVER_URL"
-      value = aws_lb.devops_lb_toh_backend.dns_name
+      value = aws_lb.lb_backend.dns_name
     }
 
     environment_variable {
@@ -83,13 +83,13 @@ resource "aws_codebuild_project" "devops_build_toh_frontend" {
 
   source {
     type            = "CODEPIPELINE"
-    buildspec = "toh-frontend-buildspec.yml"
+    buildspec = "${var.app_name}-frontend-buildspec.yml"
   }
 
   logs_config {
     cloudwatch_logs {
       group_name  = "Devops"
-      stream_name = "codebuild-toh-frontend"
+      stream_name = "${var.app_name}-codebuild-frontend"
     }
   }
 }

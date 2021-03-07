@@ -1,6 +1,6 @@
-resource "aws_security_group" "devops_lb_sg_toh_backend" {
-  name   = "devops-lb-sg-toh-backend"
-  vpc_id = aws_vpc.devops_vpc_toh.id
+resource "aws_security_group" "sg_lb_backend" {
+  name   = "${var.app_name}-sg-lb-backend"
+  vpc_id = aws_vpc.vpc.id
 
   ingress {
     from_port   = var.backend_port
@@ -17,9 +17,9 @@ resource "aws_security_group" "devops_lb_sg_toh_backend" {
   }
 }
 
-resource "aws_security_group" "devops_lb_sg_toh_frontend" {
-  name   = "devops-lb-sg-toh-frontend"
-  vpc_id = aws_vpc.devops_vpc_toh.id
+resource "aws_security_group" "sg_lb_frontend" {
+  name   = "${var.app_name}-sg-lb-frontend"
+  vpc_id = aws_vpc.vpc.id
 
   ingress {
     from_port   = var.frontend_port
@@ -36,62 +36,62 @@ resource "aws_security_group" "devops_lb_sg_toh_frontend" {
   }
 }
 
-resource "aws_lb" "devops_lb_toh_backend" {
-  name               = "devops-lb-toh-backend"
+resource "aws_lb" "lb_backend" {
+  name               = "${var.app_name}-lb-backend"
   internal = false
   load_balancer_type = "application"
-  security_groups = [ aws_security_group.devops_lb_sg_toh_backend.id ]
+  security_groups = [ aws_security_group.sg_lb_backend.id ]
   subnets = [ 
-      aws_subnet.devops_vpc_toh_subnet_1.id,
-      aws_subnet.devops_vpc_toh_subnet_2.id
+      aws_subnet.vpc_subnet_1.id,
+      aws_subnet.vpc_subnet_2.id
   ]
 }
 
-resource "aws_lb" "devops_lb_toh_frontend" {
-  name               = "devops-lb-toh-frontend"
+resource "aws_lb" "lb_frontend" {
+  name               = "${var.app_name}-lb-frontend"
   internal = false
   load_balancer_type = "application"
-  security_groups = [ aws_security_group.devops_lb_sg_toh_frontend.id ]
+  security_groups = [ aws_security_group.sg_lb_frontend.id ]
   subnets = [ 
-      aws_subnet.devops_vpc_toh_subnet_1.id,
-      aws_subnet.devops_vpc_toh_subnet_2.id
+      aws_subnet.vpc_subnet_1.id,
+      aws_subnet.vpc_subnet_2.id
   ]
 }
 
-resource "aws_lb_listener" "devops_lb_listener_toh_backend" {
-  load_balancer_arn = aws_lb.devops_lb_toh_backend.arn
+resource "aws_lb_listener" "lb_listener_backend" {
+  load_balancer_arn = aws_lb.lb_backend.arn
   port              = var.backend_port
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.devops_lb_tg_toh_backend.arn
+    target_group_arn = aws_lb_target_group.lb_tg_backend.arn
   }
 }
 
-resource "aws_lb_listener" "devops_lb_listener_toh_frontend" {
-  load_balancer_arn = aws_lb.devops_lb_toh_frontend.arn
+resource "aws_lb_listener" "lb_listener_frontend" {
+  load_balancer_arn = aws_lb.lb_frontend.arn
   port              = var.frontend_port
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.devops_lb_tg_toh_frontend.arn
+    target_group_arn = aws_lb_target_group.lb_tg_frontend.arn
   }
 }
 
-resource "aws_lb_target_group" "devops_lb_tg_toh_frontend" {
-  name        = "devops-lb-tg-toh-frontend"
+resource "aws_lb_target_group" "lb_tg_frontend" {
+  name        = "${var.app_name}-lb-tg-frontend"
   port        = var.frontend_port
   protocol    = "HTTP"
   target_type = "ip"
-  vpc_id      = aws_vpc.devops_vpc_toh.id
+  vpc_id      = aws_vpc.vpc.id
 }
 
-resource "aws_lb_target_group" "devops_lb_tg_toh_backend" {
-  name        = "devops-lb-tg-toh-backend"
+resource "aws_lb_target_group" "lb_tg_backend" {
+  name        = "${var.app_name}-lb-tg-backend"
   port        = var.backend_port
   protocol    = "HTTP"
   target_type = "ip"
-  vpc_id      = aws_vpc.devops_vpc_toh.id
+  vpc_id      = aws_vpc.vpc.id
 }

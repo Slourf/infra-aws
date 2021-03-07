@@ -1,5 +1,5 @@
-resource "aws_ecr_repository" "ecr_toh_frontend" {
-    name = "toh-frontend"
+resource "aws_ecr_repository" "ecr_frontend" {
+    name = "${var.app_name}-frontend"
     image_tag_mutability = "MUTABLE"
 
     image_scanning_configuration {
@@ -7,8 +7,8 @@ resource "aws_ecr_repository" "ecr_toh_frontend" {
     }
 }
 
-resource "aws_ecr_repository" "ecr_toh_backend" {
-    name = "toh-backend"
+resource "aws_ecr_repository" "ecr_backend" {
+    name = "${var.app_name}-backend"
     image_tag_mutability = "MUTABLE"
 
     image_scanning_configuration {

@@ -15,6 +15,8 @@ provider "aws" {
 module "toh" {
   source = "./toh"
 
+  app_name = "toh"
+
   backend_port  = var.backend_port
   frontend_port = var.frontend_port
   github        = var.github

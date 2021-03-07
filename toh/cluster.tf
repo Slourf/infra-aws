@@ -1,4 +1,4 @@
-resource "aws_ecs_cluster" "devops_cluster_toh" {
-  name               = "devops-cluster-toh"
+resource "aws_ecs_cluster" "cluster" {
+  name               = "${var.app_name}-cluster"
   capacity_providers = ["FARGATE"]
 }

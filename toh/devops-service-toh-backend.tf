@@ -1,6 +1,6 @@
-resource "aws_security_group" "devops_service_sg_toh_backend" {
-  name   = "devops-service-sg-toh-backend"
-  vpc_id = aws_vpc.devops_vpc_toh.id
+resource "aws_security_group" "sg_service_backend" {
+  name   = "${var.app_name}-sg-service-backend"
+  vpc_id = aws_vpc.vpc.id
 
   ingress {
     from_port   = var.backend_port
@@ -17,10 +17,10 @@ resource "aws_security_group" "devops_service_sg_toh_backend" {
   }
 }
 
-resource "aws_ecs_service" "devops_service_toh_backend" {
-  name            = "devops-service-toh-backend"
-  cluster         = aws_ecs_cluster.devops_cluster_toh.id
-  task_definition = aws_ecs_task_definition.toh_backend.id
+resource "aws_ecs_service" "service_backend" {
+  name            = "${var.app_name}-service-backend"
+  cluster         = aws_ecs_cluster.cluster.id
+  task_definition = aws_ecs_task_definition.backend.id
   launch_type     = "FARGATE"
   desired_count   = 2
   deployment_maximum_percent = 100
@@ -28,16 +28,16 @@ resource "aws_ecs_service" "devops_service_toh_backend" {
 
   network_configuration {
     subnets          = [
-      aws_subnet.devops_vpc_toh_subnet_1.id,
-      aws_subnet.devops_vpc_toh_subnet_2.id
+      aws_subnet.vpc_subnet_1.id,
+      aws_subnet.vpc_subnet_2.id
     ]
     assign_public_ip = true
-    security_groups  = [aws_security_group.devops_service_sg_toh_backend.id]
+    security_groups  = [aws_security_group.sg_service_backend.id]
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.devops_lb_tg_toh_backend.arn
-    container_name   = "toh-backend"
+    target_group_arn = aws_lb_target_group.lb_tg_backend.arn
+    container_name   = "${var.app_name}-backend"
     container_port   = var.backend_port
   }
 }

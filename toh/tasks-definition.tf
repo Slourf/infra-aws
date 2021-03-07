@@ -1,8 +1,8 @@
-resource "aws_ecs_task_definition" "toh_frontend" {
-  family                   = "toh-frontend"
+resource "aws_ecs_task_definition" "frontend" {
+  family                   = "${var.app_name}-frontend"
   container_definitions    = templatefile(
-    "./toh/toh-frontend.json",
-    { repository_url =  aws_ecr_repository.ecr_toh_frontend.repository_url }
+    "./toh/${var.app_name}-frontend.json",
+    { repository_url =  aws_ecr_repository.ecr_frontend.repository_url }
   )
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
@@ -11,11 +11,11 @@ resource "aws_ecs_task_definition" "toh_frontend" {
   execution_role_arn = data.aws_iam_role.ecs_task_execution_role.arn
 }
 
-resource "aws_ecs_task_definition" "toh_backend" {
-  family                   = "toh-backend"
+resource "aws_ecs_task_definition" "backend" {
+  family                   = "backend"
   container_definitions    = templatefile(
-    "./toh/toh-backend.json",
-    { repository_url =  aws_ecr_repository.ecr_toh_backend.repository_url }
+    "./toh/${var.app_name}-backend.json",
+    { repository_url =  aws_ecr_repository.ecr_backend.repository_url }
   )
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
